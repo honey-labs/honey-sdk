@@ -1,19 +1,15 @@
 import * as anchor from '@project-serum/anchor';
-import { PublicKey } from '@solana/web3.js';
+import { Connection, PublicKey } from '@solana/web3.js';
 import { useEffect, useState } from 'react';
 import { JetClient } from '../wrappers/client';
 import { JetMarket } from '../wrappers/market';
 import { JetReserve } from '../wrappers/reserve';
 import { JetUser } from '../wrappers/user';
 import { useAnchor, Wallet } from '../contexts/anchor';
-import { useConnection } from '../contexts/connection';
-import { useHoney } from '../contexts/honey';
 import { programIds } from '../helpers/ids';
+import { SupportedWallet } from '../helpers/types';
 
-export const useMarket = () => {
-  const connection = useConnection();
-  const { user } = useHoney();
-  const wallet = user.wallet;
+export const useMarket = (connection: Connection, wallet: SupportedWallet, jetId: string) => {
   const { idlMetadata, isConfigured } = useAnchor();
 
   const [jetClient, setJetClient] = useState<JetClient>();
@@ -25,7 +21,7 @@ export const useMarket = () => {
     const provider = new anchor.Provider(connection, wallet as unknown as Wallet, anchor.Provider.defaultOptions());
     const fetchJetClient = async () => {
       if (!wallet) return;
-      const client: JetClient = await JetClient.connect(provider, programIds().jet.JET_ID, true);
+      const client: JetClient = await JetClient.connect(provider, jetId, true);
       setJetClient(client);
       const markets = idlMetadata.market.market;
       const jetMarketPubKey: PublicKey = new PublicKey(markets);
@@ -44,8 +40,8 @@ export const useMarket = () => {
       setJetReserves(reserves);
     };
     // load jet
-    if (isConfigured && user.wallet) fetchJetClient();
-  }, [isConfigured, connection, idlMetadata, user]);
+    if (isConfigured && wallet) fetchJetClient();
+  }, [isConfigured, connection, idlMetadata, wallet]);
 
   return {
     jetClient,
