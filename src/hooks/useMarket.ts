@@ -1,7 +1,10 @@
 import * as anchor from '@project-serum/anchor';
 import { PublicKey } from '@solana/web3.js';
 import { useEffect, useState } from 'react';
-import { JetClient, JetMarket, JetUser, JetReserve } from '..';
+import { JetClient } from '../wrappers/client';
+import { JetMarket } from '../wrappers/market';
+import { JetReserve } from '../wrappers/reserve';
+import { JetUser } from '../wrappers/user';
 import { useAnchor, Wallet } from '../contexts/anchor';
 import { useConnection } from '../contexts/connection';
 import { useHoney } from '../contexts/honey';
@@ -9,7 +12,7 @@ import { programIds } from '../helpers/ids';
 
 export const useMarket = () => {
   const connection = useConnection();
-  const { user, userConfigured } = useHoney();
+  const { user } = useHoney();
   const wallet = user.wallet;
   const { idlMetadata, isConfigured } = useAnchor();
 
@@ -41,8 +44,8 @@ export const useMarket = () => {
       setJetReserves(reserves);
     };
     // load jet
-    if (isConfigured && userConfigured && user.wallet) fetchJetClient();
-  }, [isConfigured, userConfigured, connection, idlMetadata, user]);
+    if (isConfigured && user.wallet) fetchJetClient();
+  }, [isConfigured, connection, idlMetadata, user]);
 
   return {
     jetClient,
