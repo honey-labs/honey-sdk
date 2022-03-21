@@ -362,11 +362,11 @@ export const sendTransaction = async (
   return [res, [txid]];
 };
 
-export const inDevelopment: boolean = window.location.hostname.indexOf('devnet') !== -1;
+// export const inDevelopment: boolean = window.location.hostname.indexOf('devnet') !== -1;
 
 export const explorerUrl = (txid: string) => {
-  const clusterParam = inDevelopment ? `?cluster=devnet` : '';
-  return `https://explorer.solana.com/transaction/${txid}${clusterParam}`;
+  // const clusterParam = inDevelopment ? `?cluster=devnet` : '';
+  // return `https://explorer.solana.com/transaction/${txid}${clusterParam}`;
 };
 
 let customProgramErrors: CustomProgramError[];
