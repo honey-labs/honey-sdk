@@ -1,5 +1,5 @@
 {
-    "name": "honey-sdk",
+    "name": "@honey-defi/sdk",
     "version": "1.0.4",
     "description": "",
     "main": "lib/index.js",
